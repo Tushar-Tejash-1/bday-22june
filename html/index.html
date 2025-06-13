@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Happy Birthday My Love</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap');
 
     body {
       margin: 0;
@@ -17,10 +17,10 @@
     .container {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: center; /* This centers children (like h1, gift-box) horizontally */
       justify-content: center;
       min-height: 100vh;
-      text-align: center;
+      text-align: center; /* This centers inline-block and text content */
       padding: 40px 20px;
       position: relative;
     }
@@ -29,6 +29,95 @@
       font-size: 3em;
       color: #fff;
       animation: fadeInDown 2s ease-out forwards;
+    }
+
+    .gift-box {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-top: 40px;
+      cursor: pointer;
+      animation: shake 1.5s infinite;
+    }
+    .lid {
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+    .gift-box::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #d94c68;
+      border-radius: 5px;
+      transform: translateY(-50%);
+      z-index: 4;
+    }
+    .lid, .box {
+      border: 2px solid #c76b7a;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .lid {
+      background: linear-gradient(135deg, #ee9ca7, #d94c68);
+      box-shadow: 0 5px 15px rgba(217, 76, 104, 0.7);
+    }
+    .gift-box::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      width: 10px;
+      height: 80%;
+      background: #d94c68;
+      border-radius: 5px;
+      transform: translateX(-50%);
+      z-index: 4;
+    }
+    .box-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #333;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-align: center;
+      z-index: 3;
+      display: none;
+    }
+    .lid, .box {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .lid {
+      background: #ee9ca7;
+      height: 30px;
+      top: 0;
+      z-index: 2;
+      transition: all 0.6s ease;
+    }
+    .box {
+      top: 30px;
+      height: calc(100% - 30px);
+      background: #ffc3d1;
+    }
+    .click-me {
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      text-align: center;
+      margin-top: 140px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(2deg); }
+      50% { transform: rotate(-2deg); }
+      75% { transform: rotate(1deg); }
     }
 
     .open-btn {
@@ -43,7 +132,6 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease, background-color 0.3s ease;
     }
-
     .open-btn:hover {
       background-color: #ffe3ec;
       transform: scale(1.05);
@@ -51,21 +139,29 @@
 
     .media-gallery {
       display: none;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
+      flex-wrap: wrap; /* Allows items to wrap to next line if space is insufficient */
+      gap: 20px; /* Space between images */
+      justify-content: center; /* Centers the images horizontally */
       margin-top: 30px;
       animation: fadeIn 1.5s ease-out forwards;
+      /* Calculate max-width for 3 images (360px each) + 2 gaps (20px each) + some padding */
+      max-width: calc(3 * 360px + 2 * 20px + 40px); /* 1080px + 40px + 40px = 1160px */
+      /* Max-width must be large enough for 3 images plus their gaps */
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px; /* Padding for the gallery itself */
     }
 
     .media-item {
-      width: 360px;
-      height: 640px;
+      width: 360px; /* Fixed width for each image */
+      height: 640px; /* Fixed height for each image */
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       border-radius: 20px;
       overflow: hidden;
+      flex-shrink: 0; /* Prevent items from shrinking */
+      /* flex-grow: 1; If you want them to expand to fill space within the row */
+      /* flex-basis: 360px; Can be used in conjunction with flex-grow */
     }
-
     .media-item img {
       width: 100%;
       height: 100%;
@@ -74,18 +170,71 @@
 
     .message {
       margin-top: 40px;
-      font-size: 1.8em;
+      font-size: 1.6em;
       color: white;
       padding: 0 20px;
-      animation: fadeInUp 2.5s ease-out forwards;
+      font-family: 'Poppins', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.75);
+      animation: typing 5s steps(45, end), blink 0.75s step-end infinite;
+      width: 0;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      50% { border-color: transparent; }
     }
 
+    .typing-container {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .typing-line {
+      font-size: 1.3em;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.75);
+      max-width: 0; /* Start with 0 width */
+      text-align: center; /* Center the text within the line */
+      animation-name: typing-center, blink;
+      animation-timing-function: steps(45, end), step-end;
+      animation-fill-mode: forwards;
+      animation-iteration-count: 1, infinite;
+    }
+
+    @keyframes typing-center {
+      from { max-width: 0; }
+      to { max-width: 70ch; /* Adjust based on your longest line content */ }
+    }
+
+    .typing-line:nth-child(1) { animation-duration: 3s, 0.75s; animation-delay: 0s, 3s; }
+    .typing-line:nth-child(2) { animation-duration: 3s, 0.75s; animation-delay: 3s, 6s; }
+    .typing-line:nth-child(3) { animation-duration: 3s, 0.75s; animation-delay: 6s, 9s; }
+    .typing-line:nth-child(4) { animation-duration: 3s, 0.75s; animation-delay: 9s, 12s; }
+    .typing-line:nth-child(5) { animation-duration: 3s, 0.75s; animation-delay: 12s, 15s; }
+    .typing-line:nth-child(6) { animation-duration: 3s, 0.75s; animation-delay: 15s, 18s; }
+    .typing-line:nth-child(7) { animation-duration: 3s, 0.75s; animation-delay: 18s, 21s; }
+    .typing-line:nth-child(8) { animation-duration: 3s, 0.75s; animation-delay: 21s, 24s; }
+    .typing-line:nth-child(9) { animation-duration: 3s, 0.75s; animation-delay: 24s, 27s; }
+    .typing-line:nth-child(10) { animation-duration: 3s, 0.75s; animation-delay: 27s, 30s; }
+    
     .private-note {
       margin-top: 60px;
       text-align: center;
       width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-
     textarea {
       width: 90%;
       max-width: 600px;
@@ -97,7 +246,6 @@
       border: none;
       resize: none;
     }
-
     .save-btn {
       margin-top: 10px;
       padding: 10px 20px;
@@ -109,11 +257,9 @@
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
     .save-btn:hover {
       background: #ffe3ec;
     }
-
     .hearts {
       position: fixed;
       top: 0;
@@ -123,7 +269,6 @@
       pointer-events: none;
       z-index: 1;
     }
-
     .heart {
       position: absolute;
       width: 20px;
@@ -132,7 +277,6 @@
       transform: rotate(45deg);
       animation: floatHearts 10s linear infinite;
     }
-
     .heart::before,
     .heart::after {
       content: '';
@@ -142,32 +286,26 @@
       background: red;
       border-radius: 50%;
     }
-
     .heart::before {
       top: -10px;
       left: 0;
     }
-
     .heart::after {
       left: -10px;
       top: 0;
     }
-
     @keyframes fadeInDown {
       from { transform: translateY(-50px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-
     @keyframes fadeInUp {
       from { transform: translateY(50px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
     @keyframes floatHearts {
       0% {
         transform: translateY(100vh) rotate(0deg);
@@ -181,80 +319,142 @@
         opacity: 0;
       }
     }
-
-    /* Responsive Layout */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2.2em;
-      }
-      .media-item {
-        width: 90vw;
-        height: auto;
-      }
-      .message {
-        font-size: 1.3em;
-      }
-      .open-btn {
-        font-size: 1.2em;
-        padding: 12px 24px;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="hearts" id="hearts"></div>
   <div class="container">
-    <h1>Happy Birthday, My Love ❤️</h1>
-    <button class="open-btn" onclick="revealGallery()">🎁 Open the Gift 🎁</button>
-    <div class="media-gallery" id="gallery">
-      <div class="media-item"><img src="IMG20230905074013.jpg" alt="gift1"></div>
-      <div class="media-item"><img src="IMG_20230601_090733_926.jpg" alt="gift2"></div>
-      <div class="media-item"><img src="Snapchat-1331151446.jpg" alt="gift3"></div>
-      <div class="media-item"><img src="IMG-20241222-WA0012.jpg" alt="gift4"></div>
-      <div class="media-item"><img src="Snapchat-985315476.jpg" alt="gift5"></div>
-      <div class="media-item"><img src="WhatsApp Image 2024-11-25 at 22.39.13_42951b4e.jpg" alt="gift6"></div>
-      <div class="media-item"><img src="IMG-20241129-WA0019.jpg" alt="gift7"></div>
-      <div class="media-item"><img src="IMG-20241208-WA0032.jpg" alt="gift8"></div>
-      <div class="media-item"><img src="Snapchat-1767384438.jpg" alt="gift9"></div>
+    <h1>Happy Birthday, Simi Chan ❤️</h1>
+    <div class="gift-box" onclick="openGift()">
+      <div class="lid"></div>
+      <div class="box"></div>
+    <p class="click-me">Click to Open 🎁</p>
     </div>
-    <div class="message">
-      Every moment with you feels like magic. Today, I just want to say: You’re the best thing that’s ever happened to me.
-      <br><br>
-      Here's to your smile, your soul, and the love we share. 🎉💖
+      <div class="box-content" id="giftContent">
+      </div>
     </div>
+  <div id="gallery" class="media-gallery">
+    <div class="media-item"><img src="IMG20231115193122.jpg" alt="gift1"></div>
+    <div class="media-item"><img src="IMG_20230601_090733_926.jpg" alt="gift2"></div>
+    <div class="media-item"><img src="Snapchat-1331151446.jpg" alt="gift3"></div>
+    <div class="media-item"><img src="IMG-20241222-WA0012.jpg" alt="gift4"></div>
+    <div class="media-item"><img src="Snapchat-985315476.jpg" alt="gift5"></div>
+    <div class="media-item"><img src="WhatsApp Image 2024-11-25 at 22.39.13_42951b4e.jpg" alt="gift6"></div>
+    <div class="media-item"><img src="IMG-20241129-WA0019.jpg" alt="gift7"></div>
+    <div class="media-item"><img src="IMG-20241222-WA0016.jpg" alt="gift8"></div>
+    <div class="media-item"><img src="Snapchat-1767384438.jpg" alt="gift9"></div>
+  </div>
+
+    <div class="typing-container" id="typingContainer">
+      <div class="typing-line">Happy Birthday, beautiful 💋</div>
+      <div class="typing-line">You are the trouble I’d choose every lifetime,</div>
+      <div class="typing-line">A spark in my calm, a rhythm, a rhyme.</div>
+      <div class="typing-line">Your smile’s my favorite kind of mess,</div>
+      <div class="typing-line">My heart beats louder when you say yes.</div>
+      <div class="typing-line">So blow your candles, make your wish—</div>
+      <div class="typing-line">But know this boy is already yours, dish by dish. 😘✨</div>
+      <div class="typing-line">Here’s to your smile, your soul, and the love we share. 🎉💖</div>
+      <div class="typing-line">💖With love💖</div>
+      <div class="typing-line">Tushar😘</div>
+    </div>
+    
     <div class="private-note">
       <h2 style="color:white;">Write a message💌</h2>
-      <textarea id="userMessage" placeholder="Anything you would like to say but too embarrassed to express..."></textarea>
-      <br>
-      <button class="save-btn" onclick="saveNote()">Post a message</button>
+      <form action="https://formspree.io/f/YOUR_FORMSPREE_FORM_ID" method="POST" id="messageForm">
+        <textarea name="message" id="userMessage" placeholder="Anything you would like to say but too embarrassed to express..." required></textarea>
+        <br />
+        <input type="hidden" name="_subject" value="Birthday Message from Simi's Page!">
+        <button type="submit" class="save-btn">Post a message</button>
+      </form>
     </div>
-  </div>
-  <audio autoplay loop hidden>
-    <source src="background.mp3" type="audio/mpeg">
+    </div>
+  <audio id="bg-music" loop>
+    <source src="joji.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
-  <script>
-    function revealGallery() {
-      const gallery = document.getElementById('gallery');
-      gallery.style.display = 'flex';
+
+  <script defer>
+    function openGift() {
+      const lid = document.querySelector('.lid');
+      lid.style.transform = 'rotate(-45deg) translateY(-60px)';
+      lid.style.opacity = '0';
+      lid.style.pointerEvents = 'none';
+      document.querySelector('.gift-box').style.animation = 'none';
+      document.getElementById('giftContent').style.display='block';
+
+      setTimeout(() => {
+        document.getElementById('gallery').style.display = 'flex';
+        document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+
+        const audio = document.getElementById('bg-music');
+        audio.volume = 0.3;
+
+        const playAudio = () => {
+          audio.play().catch((error) => {
+            console.log('Audio play blocked by browser:', error);
+            const playBtn = document.createElement('button');
+            playBtn.textContent = '🎵 Click to play music';
+            playBtn.style.cssText = 'position:fixed;top:20px;right:20px;padding:10px;background:#fff;border:none;border-radius:20px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.2);z-index:1000;';
+            playBtn.onclick = () => {
+              audio.play();
+              playBtn.remove();
+            };
+            document.body.appendChild(playBtn);
+          });
+        };
+
+        fetch('joji.mp3')
+          .then(response => {
+            if (response.ok) {
+              console.log('Audio file found on server!');
+              playAudio();  
+            } else {
+              console.error('Audio file not found - response status:', response.status);
+              alert('Background music could not be loaded. (File not found)');
+            }
+          })
+          .catch(error => {
+            console.error('Error checking audio file path (network error or CORS):', error);
+            alert('Could not check background music file. (Network or CORS issue)');
+          });
+
+        audio.addEventListener('loadstart', () => console.log('Audio: Load started'));
+        audio.addEventListener('loadeddata', () => console.log('Audio: Data loaded'));
+        audio.addEventListener('canplaythrough', () => {
+          console.log('Audio: Can play through');
+        });
+        audio.addEventListener('error', (e) => {
+          console.error('Audio error:', e);
+          console.error('Audio error details:', audio.error);
+        });
+
+        audio.load();
+      }, 600);
     }
 
-    function saveNote() {
-      const note = document.getElementById('userMessage').value;
-      if (note.trim()) {
-        const blob = new Blob([note], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'message_for_boy.txt';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } else {
-        alert("Please write a message before saving!");
-      }
-    }
+    // You can remove the old saveNote function as it's no longer needed
+    // function saveNote() {
+    //   const note = document.getElementById('userMessage').value.trim();
+    //   if (!note) {
+    //     alert("Please write a message before saving!");
+    //     return;
+    //   }
+
+    //   fetch('/send-message', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ message: note }),
+    //   })
+    //   .then((response) => response.text())
+    //   .then((data) => {
+    //     alert('Message sent successfully!');
+    //     document.getElementById('userMessage').value = '';
+    //   })
+    //   .catch((error) => {
+    //     alert('Failed to send message.');
+    //     console.error(error);
+    //   });
+    // }
 
     function createHeart() {
       const heart = document.createElement('div');
@@ -266,6 +466,7 @@
     }
 
     setInterval(createHeart, 300);
+
   </script>
 </body>
 </html>
